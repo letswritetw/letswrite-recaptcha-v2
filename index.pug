@@ -1,0 +1,180 @@
+- var link = 'recaptcha-v2'
+- var title = '用 reCAPTCHA v2 來做非機器人驗證'
+- var description = '方法1：直接埋 HTML code'
+
+<!DOCTYPE html>
+html(lang="zh-TW")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title #{title} - Augustus - Let's Write
+
+    link(rel="canonical", href=`https://letswrite.tw/${link}/`)
+    meta(property="og:url", content=`https://letswritetw.github.io/letswrite-${link}/`)
+
+    meta(property="fb:app_id", content="2435108729902508")
+    meta(property="og:type", content="website")
+
+    meta(property="og:site_name", content="Let's Write")
+    meta(property="og:title", content=`${title} - Augustus - Let's Write`)
+    meta(itemprop="name", content=`${title} - Augustus - Let's Write`)
+
+    meta(name="description", content=description)
+    meta(property="og:description", content=description)
+    meta(itemprop="description", content=description)
+
+    meta(itemprop="image", content=`https://letswritetw.github.io/${link}/fb.jpg`)
+    meta(property="og:image", content=`https://letswritetw.github.io/${link}/fb.jpg`)
+    meta(property="og:image:width", content="1200")
+    meta(property="og:image:height", content="630")
+    meta(property="og:image:alt", content=title)
+
+    link(rel="shortcut icon", href="https://letswritetw.github.io/letswritetw/dist/img/logo_512.png")
+
+    //- css
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css")
+    link(rel="stylesheet", href="dist/style.min.css")
+
+    // Google Tag Manager
+    script.
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-PGQ9WQT');
+  body
+
+    // Google Tag Manager (noscript)
+    noscript
+      iframe(src="https://www.googletagmanager.com/ns.html?id=GTM-PGQ9WQT", height="0", width="0", style="display:none;visibility:hidden")
+    
+    #app.container
+
+      h1.text-center reCAPTCHA v2 使用範例
+
+      hr
+
+      .tab.text-center
+        a.active(href="index.html") 方法一
+        a(href="index2.html") 方法二
+        a(href="gas.html") 後端 GAS
+
+      hr
+
+      h2 方法1：直接埋 HTML code
+      p 參考文件：
+        a(href="https://developers.google.com/recaptcha/docs/display#auto_render", target="_blank", rel="noopener noreferrer") Automatically render the reCAPTCHA widget
+
+      h3 code
+      pre
+        code.
+          &lt;!-- 放置驗證器 -->
+          &lt;div
+              class="g-recaptcha"
+              data-sitekey=""
+              data-theme="light" data-size="normal"
+              data-callback="verify"
+              data-expired-callback="expired"
+              data-error-callback="error">
+          &lt;/div>
+
+          &lt;-- 引用 JS -->
+          &lt;script src="https://www.google.com/recaptcha/api.js" async defer>&lt;/script>
+
+      ul
+        li
+          strong class 
+          | 必須為「g-recaptcha」
+        li
+          strong data-sitekey
+          | ，填入「網站金鑰」
+        li
+          strong data-theme
+          | ，亮色或深色樣式：dark、light。預設是 light
+        li
+          strong data-size
+          | ，大小：compact、normal。預設是 normal
+        li
+          strong data-callback
+          | ，驗證完成後要觸發哪個 function，會回傳 g-recaptcha-response token
+        li
+          strong data-expired-callback
+          | ，當驗證過期後會觸發哪個 function
+        li
+          strong data-error-callback
+          | ，當驗證失敗時會觸發哪個 function
+
+      h3 產出範例
+      div(class="g-recaptcha",
+          data-sitekey='6LdiDOIZAAAAAJUvYtLzY-aRQH6txpNQr_ZM41HZ',
+          data-theme="light", data-size="normal",
+          data-callback="verifyCallback",
+          data-expired-callback="expired",
+          data-error-callback="error")
+      h4 驗證成功才會出現的按鈕
+      summary.text-center
+        button#verify.none(type="button") 驗證成功！
+
+      hr
+
+
+
+    script(src="https://www.google.com/recaptcha/api.js", async, defer)
+    script.
+
+      var uriIP = 'https://www.cloudflare.com/cdn-cgi/trace';
+
+      // GAS 部署為網路應用程式後取得的 URL
+      var uriGAS = 'https://script.google.com/macros/s/AKfycbwQctW6eHbxsck1X2PD5K9FwRF0a1HQGyqf-34F68YM78O7bYg/exec';
+
+      // 取 ip
+      var ip;
+      fetch(uriIP)
+        .then(response => response.text())
+        .then(result => {
+          var resultArr = result.split('\n');
+          for(var i = 0, len = resultArr.length; i < len; i++)	{
+            var tempArr = resultArr[i].split('=');
+            if(tempArr[0] == 'ip') {
+              ip = tempArr[1];
+              break;
+            }
+          }
+        })
+        .catch(err => {
+          window.alert(err)
+        });
+
+      // 方法 1：reCAPTCHA 送到後端做驗證
+      function verifyCallback(token) {
+
+        var formData = new FormData();
+        formData.append('token', token);
+        formData.append('ip', ip);
+
+        fetch(uriGAS, {
+          method: "POST",
+          body: formData
+        }).then(response => response.json())
+          .then(result => {
+            if(result.success) {
+              document.getElementById('verify').classList.remove('none');
+            } else {
+              window.alert(result['error-codes'][0])
+            }
+          })
+          .catch(err => {
+            window.alert(err)
+          })
+      }
+
+      // 過期要做的事
+      function expired(ex) {
+        window.alert('reCAPTCHA 驗證程序到期')
+      }
+
+      // 失敗要做的事
+      function error(err) {
+        window.alert('reCAPTCHA 驗證失敗')
+      }
