@@ -30,6 +30,17 @@
 		"oF": 0,
 		"oS": 3
 		},
+	"/fb.jpg": {
+		"ft": 16384,
+		"iS": 111536,
+		"jF": 0,
+		"oA": 0,
+		"oAP": "/fb.jpg",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"q": 100
+		},
 	"/gas.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -110,17 +121,6 @@
 		"pME": 1,
 		"rFN": 0,
 		"uCM": 0
-		},
-	"/src/main.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/src/main-min.js",
-		"oF": 0,
-		"sC": 3,
-		"tS": 0
 		},
 	"/src/style.sass": {
 		"aP": 1,
