@@ -2,4 +2,4 @@
 
 Demo：[demo](https://letswritetw.github.io/letswrite-recaptcha-v2/)
 
-筆記文：[Let's Write](https://letswrite.tw/recaptcha-v2/)
+筆記文：[Let's Write](https://www.letswrite.tw/recaptcha-v2/)
